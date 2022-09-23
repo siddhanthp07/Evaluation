@@ -115,3 +115,64 @@ mysql> SELECT rental_id, car_id, customer_id , km_driven FROM rentals WHERE pick
 | 4         | 4      | 4           |       760 |
 +-----------+--------+-------------+-----------+
 3 rows in set (0.00 sec)
+
+SELECT partner_id, partner_name, phone_no FROM delivery_partners WHERE rating BETWEEN 3 AND 5 ORDER BY partner_id ASC;
++------------+--------------+-----------+
+| partner_id | partner_name | phone_no  |
++------------+--------------+-----------+
+| 1          | Ram          | 901020090 |
+| 2          | Shaam        | 941410090 |
+| 3          | Gangaram     | 787410090 |
++------------+--------------+-----------+
+
+mysql> SELECT CONCAT( hotel_name, " is a ",hotel_type, " hotel" ) AS HOTEL_INFO FROM hotel_details
+    -> ORDER BY HOTEL_INFO DESC;
++-----------------------------------+
+| HOTEL_INFO                        |
++-----------------------------------+
+| Shrikrishna is a Veg hotel |
+| Sayaji is a Non Veg hotel          |
+| Ramkrishna is a Veg hotel  |
+| Jerry is a Nonveg  hotel          |
+| Harrikrishna is a Veg hotel       |
+| Al-Bkr is a Non Veg hotel      |
++-----------------------------------+   
+ 
+SELECT hotel_id, hotel_name, hotel_type FROM hotel_details
+    -> WHERE hotel_id NOT IN ( SELECT hotel_id FROM orders WHERE order_date BETWEEN '2022-05-01' AND '2022-08-31' );
++----------+--------------+------------+
+| hotel_id | hotel_name   | hotel_type |
++----------+--------------+------------+
+| 3        | Shrikrishna  | Restaraunt |
+| 4        | Al-Bkr       | Restaraunt |
+| 5        | Harrikrishna | Veg        |
+| 6        | Jerry        | Nonveg     |
++----------+--------------+------------+                    							
+ 
+Select orders.hotel_id, hotel_details.hotel_name, count(orders.order_id) as no_of_orders
+    -> from orders, hotel_details
+    -> where orders.hotel_id = hotel_details.hotel_id
+    -> group by hotel_id
+    -> having count(orders.order_id) > 5;
+
+ UPDATE customers SET phone_no = 9876543210 WHERE customer_id =  '4';
+Query OK, 1 row affected (0.01 sec)
+
+ALTER TABLE customers MODIFY customer_id INT;
+
+
+SELECT partner_id, partner_name,
+    -> CASE WHEN rating>=4 THEN 'GOOD'
+    -> WHEN rating>=2 AND rating<4 THEN 'AVERAGE'
+    -> WHEN rating<2 THEN 'WORST' END AS REVIEW
+    -> FROM delivery_partners
+    -> ORDER BY partner_id ASC;
++------------+--------------+---------+
+| partner_id | partner_name | REVIEW  |
++------------+--------------+---------+
+| 1          | Ram          | AVERAGE |
+| 2          | Shaam        | GOOD    |
+| 3          | Gangaram     | GOOD    |
+| 4          | Sitaram      | AVERAGE |
++------------+--------------+---------+
+4 rows in set (0.00 sec)
